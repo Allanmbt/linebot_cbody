@@ -11,6 +11,7 @@ import pytesseract
 import requests
 import os
 import io
+import re
 import traceback
 
 app = Flask(__name__)
@@ -35,7 +36,9 @@ def handle_text_message(event):
     user_id = event.source.user_id
     msg = event.message.text
 
-    if msg.startswith('66') and len(msg) == 19 and msg.isdigit():
+    # 查找消息中是否包含以66开头且长度为19位的数字
+    match = re.search(r'66\d{17}', msg)
+    if match:
         try:
             line_bot_api.reply_message(event.reply_token, TextSendMessage('order'))
         except:
@@ -58,16 +61,14 @@ def handle_image_message(event):
     text = pytesseract.image_to_string(image)
     app.logger.info(f"Detected text: {text}")
 
-    if "66" in text:
-        for word in text.split():
-            if word.startswith('66') and len(word) == 19 and word.isdigit():
-                try:
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage('order_image'))
-                    return
-                except:
-                    print(traceback.format_exc())
-                    line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
-                    return
+    # 查找文本中是否包含以66开头且长度为19位的数字
+    match = re.search(r'66\d{17}', text)
+    if match:
+        try:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('order_image'))
+        except:
+            print(traceback.format_exc())
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
