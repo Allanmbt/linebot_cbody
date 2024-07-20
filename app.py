@@ -22,8 +22,11 @@ line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
 # Configure Tesseract path if necessary
-if shutil.which("tesseract") is not None:
-    pytesseract.pytesseract.tesseract_cmd = shutil.which("tesseract")
+tesseract_path = shutil.which("tesseract")
+if tesseract_path:
+    pytesseract.pytesseract.tesseract_cmd = tesseract_path
+else:
+    raise EnvironmentError("Tesseract not found. Please install Tesseract-OCR.")
 
 @app.route("/callback", methods=['POST'])
 def callback():
