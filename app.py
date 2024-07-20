@@ -34,11 +34,11 @@ def handle_message(event):
 
     if msg.startswith('66') and len(msg) == 19 and msg.isdigit():
         try:
-            line_bot_api.reply_message(event.reply_token, TextSendMessage('order'))
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('order'+user_id))
         except:
             print(traceback.format_exc())
             line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
-    elif msg.lower() == 'id':
+    elif msg.lower() == 'userid':
         try:
             line_bot_api.reply_message(event.reply_token, TextSendMessage(user_id))
         except:
