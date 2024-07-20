@@ -29,10 +29,18 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
+   user_id = event.source.user_id
     msg = event.message.text
+
     if msg.startswith('66') and len(msg) == 19 and msg.isdigit():
         try:
             line_bot_api.reply_message(event.reply_token, TextSendMessage('order'))
+        except:
+            print(traceback.format_exc())
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
+    elif msg.lower() == 'id':
+        try:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(user_id))
         except:
             print(traceback.format_exc())
             line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
