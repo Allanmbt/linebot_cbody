@@ -29,11 +29,13 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    try:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage('欢迎加入cbody'))
-    except:
-        print(traceback.format_exc())
-        line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
+    msg = event.message.text
+    if msg.startswith('66') and len(msg) == 8 and msg.isdigit():
+        try:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('order'))
+        except:
+            print(traceback.format_exc())
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
