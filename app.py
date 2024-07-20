@@ -29,6 +29,7 @@ if tesseract_path:
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 else:
     logging.error("Tesseract not found. Please install Tesseract-OCR.")
+    raise EnvironmentError("Tesseract not found. Please install Tesseract-OCR.")
 
 @app.route("/callback", methods=['POST'])
 def callback():
