@@ -14,6 +14,7 @@ import io
 import re
 import traceback
 import shutil
+import logging
 
 app = Flask(__name__)
 
@@ -21,12 +22,13 @@ app = Flask(__name__)
 line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
-# Configure Tesseract path if necessary
+# 确认 Tesseract 安装路径
 tesseract_path = shutil.which("tesseract")
 if tesseract_path:
+    logging.info(f"Tesseract found at: {tesseract_path}")
     pytesseract.pytesseract.tesseract_cmd = tesseract_path
 else:
-    raise EnvironmentError("Tesseract not found. Please install Tesseract-OCR.")
+    logging.error("Tesseract not found. Please install Tesseract-OCR.")
 
 @app.route("/callback", methods=['POST'])
 def callback():
