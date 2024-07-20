@@ -10,6 +10,6 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: CHANNEL_ACCESS_TOKEN
-        value: your-channel-access-token
+        value: 9bKOyKsHGMMXBYXboCRDcpMVagxBvoZUnomf75KMj6mgDU0hxg/i2wYO8L1P1/j457IOZGfhS/Ok5ZSHnTYmONaGqZQdW3A4PKmxz27xsbBj/bJhMrPB1P0hQZidUWPVj3wvXpLyCg4wAo8zaoayuAdB04t89/1O/w1cDnyilFU=
       - key: CHANNEL_SECRET
-        value: your-channel-secret
+        value: 22ee1258de3a7924658a762e9d1b75c3

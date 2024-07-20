@@ -13,6 +13,7 @@ import os
 import io
 import re
 import traceback
+import shutil
 
 app = Flask(__name__)
 
@@ -21,7 +22,8 @@ line_bot_api = LineBotApi(os.getenv('CHANNEL_ACCESS_TOKEN'))
 handler = WebhookHandler(os.getenv('CHANNEL_SECRET'))
 
 # Configure Tesseract path if necessary
-pytesseract.pytesseract.tesseract_cmd = '/usr/local/bin/tesseract'
+if shutil.which("tesseract") is not None:
+    pytesseract.pytesseract.tesseract_cmd = shutil.which("tesseract")
 
 @app.route("/callback", methods=['POST'])
 def callback():
