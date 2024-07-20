@@ -6,8 +6,11 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from linebot.models import *
-
+from PIL import Image
+import pytesseract
+import requests
 import os
+import io
 import traceback
 
 app = Flask(__name__)
@@ -28,7 +31,7 @@ def callback():
     return 'OK'
 
 @handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
+def handle_text_message(event):
     user_id = event.source.user_id
     msg = event.message.text
 
@@ -44,6 +47,27 @@ def handle_message(event):
         except:
             print(traceback.format_exc())
             line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
+
+@handler.add(MessageEvent, message=ImageMessage)
+def handle_image_message(event):
+    user_id = event.source.user_id
+    message_content = line_bot_api.get_message_content(event.message.id)
+    image = Image.open(io.BytesIO(message_content.content))
+
+    # 使用Tesseract OCR识别图片中的文本
+    text = pytesseract.image_to_string(image)
+    app.logger.info(f"Detected text: {text}")
+
+    if "66" in text:
+        for word in text.split():
+            if word.startswith('66') and len(word) == 19 and word.isdigit():
+                try:
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage('order_image'))
+                    return
+                except:
+                    print(traceback.format_exc())
+                    line_bot_api.reply_message(event.reply_token, TextSendMessage('发生错误，请稍后再试。'))
+                    return
 
 @handler.add(PostbackEvent)
 def handle_postback(event):
