@@ -30,7 +30,7 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     msg = event.message.text
-    if msg.startswith('66') and len(msg) == 8 and msg.isdigit():
+    if msg.startswith('66') and len(msg) == 19 and msg.isdigit():
         try:
             line_bot_api.reply_message(event.reply_token, TextSendMessage('order'))
         except:
